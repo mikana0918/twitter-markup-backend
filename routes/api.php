@@ -14,6 +14,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::get('/health', function(Request $request) {
+    return "[twitter-markup-backend] alive!";
+});
+
+Route::get('/tweets', function(Request $request) {
+    // TODO: Tweet一覧を表示するようにする
+    return "[twitter-markup-backend] This is tweets [GET] endpoint";
+});
+
+
+Route::post('/tweets', function (Request $request) {
+    // TODO: Tweetを新規作成できるようにする
+    return "[twitter-markup-backend] This is tweets [GET] endpoint";
 });
