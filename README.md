@@ -14,7 +14,15 @@ $ docker-compose exec mysql bash
 # Laravelコンテナ
 $ docker-compose exec laravel.test bash
 ```
+### 初期データ投入 / DBマイグレーション
+```bash
+# Laravelコンテナの中で実行が必要です
 
+# DBスキーママイグレーション
+$ php artisan db:migrate
+# DBデータ投入(seeder)
+$ php artisan db:seed
+```
 __________________________________
 
  <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
