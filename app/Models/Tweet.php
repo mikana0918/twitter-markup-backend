@@ -43,7 +43,7 @@ class Tweet extends Model
      */
     public function retweets(): HasMany
     {
-        return $this->hasMany(ReTweet::class, '');
+        return $this->hasMany(ReTweet::class, 'tweet_id','id');
     }
 
     /**

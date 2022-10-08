@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\TweetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,13 +25,13 @@ Route::get('/health', function(Request $request) {
     return "[twitter-markup-backend] alive!";
 });
 
-Route::get('/tweets', function(Request $request) {
-    // TODO: Tweet一覧を表示するようにする
-    return "[twitter-markup-backend] This is tweets [GET] endpoint";
+// Currently there is no auth module implemented,
+// users endpoints only returns first user found on DB
+Route::controller(UserController::class)->group(function () {
+    Route::get('/users/me', 'me');
 });
 
-
-Route::post('/tweets', function (Request $request) {
-    // TODO: Tweetを新規作成できるようにする
-    return "[twitter-markup-backend] This is tweets [GET] endpoint";
+Route::controller(TweetController::class)->group(function() {
+    Route::get('/tweets', 'list');
+//    Route::post('tweets', 'create');
 });
