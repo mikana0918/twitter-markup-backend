@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('tweet_attachments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('tweet_id')->constrained('tweets')->onDelete('cascade');
             $table->text('path');
             $table->timestamps();
             $table->softDeletes($column = 'deleted_at', $precision = 0);
