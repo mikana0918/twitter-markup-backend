@@ -6,8 +6,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/**
+ * Class User
+ * @package App\Models
+ * @extends \Illuminate\Foundation\Auth\User
+ *
+ * @property int $id
+ * @property string $name
+ * @property Carbon|null $email_verified_at
+ * @property string $password
+ * @property string $remember_token
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ */
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -41,4 +56,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * @return BelongsToMany
+     */
+    public function following(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'user_following_user', 'user_id', 'following_user_id');
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function followers(): BelongsToMany {
+        return $this->belongsToMany(User::class, 'user_followed_by_user', 'user_id', 'followed_by_user_id');
+    }
 }
