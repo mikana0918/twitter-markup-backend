@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\FollowedUser;
 use Illuminate\Database\Seeder;
-use App\Models\User;
 
-class DefaultUserSeeder extends Seeder
+class FollowedUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,6 +15,6 @@ class DefaultUserSeeder extends Seeder
      */
     public function run()
     {
-        User::factory(20)->create();
+        FollowedUser::factory(50)->create();
     }
 }
