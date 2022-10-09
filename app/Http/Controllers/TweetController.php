@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Tweet;
 
-class TweetController extends controller
+class TweetController extends Controller
 {
     /**
      * @param Request $request
