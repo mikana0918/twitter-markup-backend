@@ -51,6 +51,26 @@ class UserController extends Controller
     }
 
     /**
+     * TODO: This method should return following based on authorized user
+     * @param Request $request
+     * @param int $userId
+     * @return JsonResponse
+     */
+    public function followUserById(Request $request, int $userId)
+    {
+        // TODO: User can not follow own
+        // TODO: User can not follow with no existing userId including deleted user
+        // TODO: I think this will always return 2xx
+        $authUser = $this->stubMe();
+
+        $userToFollow = User::find($userId);
+
+        $authUser->following()->attach($userToFollow);
+
+        return response()->json();
+    }
+
+    /**
      * TODO: implement auth module and get auth user
      *
      * @return User

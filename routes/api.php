@@ -30,6 +30,7 @@ Route::get('/health', function(Request $request) {
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/me', 'me');
     Route::get('/users/followings', 'followingList');
+    Route::post('/users/followings/{userId}', 'followUserById');
     Route::get('/users/followers', 'followersList');
 });
 
