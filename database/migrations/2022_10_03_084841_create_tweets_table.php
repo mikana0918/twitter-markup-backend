@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('tweets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('user_id')->constrained('users');
             $table->string('body', 255);
             $table->timestamps();
             $table->softDeletes($column = 'deleted_at', $precision = 0);
