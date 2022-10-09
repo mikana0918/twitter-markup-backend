@@ -29,6 +29,8 @@ Route::get('/health', function(Request $request) {
 // users endpoints only returns first user found on DB
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/me', 'me');
+    Route::get('/users/followings', 'followingList');
+    Route::get('/users/followers', 'followersList');
 });
 
 Route::controller(TweetController::class)->group(function() {

@@ -12,4 +12,18 @@ class UserControllerTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_it_should_get_followings()
+    {
+        $response = $this->getJson('/api/users/followings');
+
+        $response->assertStatus(200);
+    }
+
+    public function test_it_should_get_followers()
+    {
+        $response = $this->getJson('/api/users/followers');
+
+        $response->assertStatus(200);
+    }
 }
