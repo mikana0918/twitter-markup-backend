@@ -18,7 +18,6 @@ return new class extends Migration
             $table->foreignId('tweet_id')->constrained('tweets');
             $table->foreignId('mentioned_tweet_id')->constrained('tweets');
             $table->timestamps();
-            $table->softDeletes($column = 'deleted_at', $precision = 0);
         });
     }
 

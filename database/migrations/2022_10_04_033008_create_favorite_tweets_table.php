@@ -18,7 +18,6 @@ return new class extends Migration
             $table->foreignId('tweet_id')->constrained('tweets')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
-            $table->softDeletes($column = 'deleted_at', $precision = 0);
         });
     }
 
