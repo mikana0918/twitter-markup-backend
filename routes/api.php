@@ -36,5 +36,7 @@ Route::controller(UserController::class)->group(function () {
 
 Route::controller(TweetController::class)->group(function() {
     Route::get('/tweets', 'list');
-//    Route::post('tweets', 'create');
+
+    Route::post('/tweets/favorites/{tweetId}', 'addFavorite');
+    Route::delete('/tweets/favorites/{tweetId}', 'removeFavorite');
 });
