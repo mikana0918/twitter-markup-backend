@@ -46,6 +46,30 @@ class TweetControllerTest extends TestCase
         $response->assertJson(fn(AssertableJson $json) => $json->has('tweet')->where('tweet.body', $body));
     }
 
+    public function test_it_should_store_re_tweet()
+    {
+        $body = 'sample re_tweet body';
+
+        /** @var Tweet $reTweetTarget */
+        $reTweetTarget = Tweet::factory()->create();
+
+        $response = $this->postJson('/api/tweets/retweet/'.$reTweetTarget->id, [
+            'body' => $body
+        ]);
+
+        $response->assertStatus(200);
+
+        $response->assertJson(
+            fn(AssertableJson $json) => $json
+                ->has('tweet')
+                ->where('tweet.body', $body)
+                ->has('retweet')
+                ->where('retweet.tweet_id', $reTweetTarget->id)
+        );
+    }
+
+    // TODO: Add those TODO tests
+
     public function test_it_can_favorite_tweet()
     {
         User::factory(2)->create();
