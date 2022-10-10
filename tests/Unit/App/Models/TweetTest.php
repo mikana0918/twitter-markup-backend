@@ -39,19 +39,20 @@ class TweetTest extends TestCase
         $this->assertEquals($mentionsOfTweet->first()->tweet_id, $tweet->id);
     }
 
-    public function test_it_has_many_retweets()
-    {
-        $tweet = Tweet::factory()->create();
-        $user = User::factory()->create();
-        $retweets = ReTweet::factory()->count(3)->create([
-            'tweet_id' => $tweet->id,
-            're_tweet_by_user_id' => $user->id
-        ]);
-
-        $this->assertEquals(3, count($retweets));
-        // Check inverse relation
-        $this->assertEquals($retweets->first()->tweet_id, $tweet->id);
-    }
+    // TODO: Test this
+    //    public function test_it_has_many_retweets()
+    //    {
+    //        $tweet = Tweet::factory()->create();
+    //        $user = User::factory()->create();
+    //        $retweets = ReTweet::factory()->count(3)->create([
+    //            'tweet_id' => $tweet->id,
+    //            're_tweet_by_user_id' => $user->id
+    //        ]);
+    //
+    //        $this->assertEquals(3, count($retweets));
+    //        // Check inverse relation
+    //        $this->assertEquals($retweets->first()->tweet_id, $tweet->id);
+    //    }
 
     public function test_it_has_many_attachments()
     {

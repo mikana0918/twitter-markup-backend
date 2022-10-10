@@ -6,10 +6,12 @@ use App\Models\FavoriteTweet;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use App\Models\Tweet;
+use App\Http\Requests\CreateTweetRequest;
 
 class TweetController extends Controller
 {
     /**
+     * Lists tweets for timeline
      * @return JsonResponse
      */
     public function list(): JsonResponse
@@ -25,6 +27,41 @@ class TweetController extends Controller
 
         return response()->json([
             'tweets' => $retweets->concat($tweets)
+        ]);
+    }
+
+    /**
+     * Shows tweets for given user
+     * @param int $tweetId
+     * @return JsonResponse
+     */
+    public function show(int $tweetId): JsonResponse
+    {
+        $tweet = Tweet::find($tweetId);
+
+        return response()->json([
+            'tweet' => $tweet
+        ]);
+    }
+
+    /**
+     * Post new tweet
+     * @param CreateTweetRequest $request
+     * @return JsonResponse
+     */
+    public function store(CreateTweetRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+
+        $authUser = $this->stubMe();
+
+        $tweet = Tweet::create([
+            'user_id' => $authUser->id,
+            'body' => $validated['body']
+        ]);
+
+        return response()->json([
+            'tweet' => $tweet
         ]);
     }
 
@@ -59,11 +96,9 @@ class TweetController extends Controller
     }
 
     // TODO: define this
-    public function retweet()
+    public function retweet(Request $request, int $tweetId)
     {
-//        if ($request->input('body')) {
-//
-//        }
+
     }
 
     /**

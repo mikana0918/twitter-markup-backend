@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * Class Tweet
@@ -23,6 +25,16 @@ class Tweet extends Model
     use HasFactory;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'user_id',
+        'body'
+    ];
+
+    /**
      * @return HasMany
      */
     public function favorites(): HasMany
@@ -38,12 +50,9 @@ class Tweet extends Model
         return $this->hasMany(MentionOfTweet::class, 'tweet_id','id');
     }
 
-    /**
-     * @return HasMany
-     */
-    public function retweets(): HasMany
+    public function retweets(): BelongsToMany
     {
-        return $this->hasMany(ReTweet::class, 'tweet_id','id');
+        return $this->belongsToMany(Tweet::class, 're_tweets', 'tweet_id', 'id');
     }
 
     /**
@@ -52,5 +61,13 @@ class Tweet extends Model
     public function attachments(): HasMany
     {
         return $this->hasMany(TweetAttachment::class, 'tweet_id', 'id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function users(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'id', 'user_id');
     }
 }
