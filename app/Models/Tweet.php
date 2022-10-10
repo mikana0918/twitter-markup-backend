@@ -52,7 +52,7 @@ class Tweet extends Model
 
     public function retweets(): BelongsToMany
     {
-        return $this->belongsToMany(Tweet::class, 're_tweets', 'tweet_id', 'id');
+        return $this->belongsToMany(Tweet::class, 're_tweets', 're_tweet_id', 'tweet_id');
     }
 
     /**

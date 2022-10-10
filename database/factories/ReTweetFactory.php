@@ -20,7 +20,7 @@ class ReTweetFactory extends Factory
     {
         return [
             'tweet_id' => Tweet::all()->random()->id,
-            're_tweet_by_user_id' => Tweet::all()->random()->id,
+            're_tweet_id' => Tweet::all()->random()->id,
         ];
     }
 }

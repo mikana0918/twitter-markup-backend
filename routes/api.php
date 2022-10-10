@@ -41,4 +41,7 @@ Route::controller(TweetController::class)->group(function() {
 
     Route::post('/tweets/favorites/{tweetId}', 'addFavorite');
     Route::delete('/tweets/favorites/{tweetId}', 'removeFavorite');
+
+    Route::post('/tweets/retweet/{targetTweetId}', 'retweet');
+    Route::delete('/tweets/retweet/{targetTweetId}', 'removeTweet');
 });

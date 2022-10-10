@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\FavoriteTweet;
+use App\Models\ReTweet;
 use App\Models\User;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use App\Models\Tweet;
 use App\Http\Requests\CreateTweetRequest;
@@ -17,16 +19,22 @@ class TweetController extends Controller
     public function list(): JsonResponse
     {
         // TODO: If we need infinite loop, we need to add pagination query
+        // TODO: Let's add test for the case that tweet has every relationships
 
         $authUser = $this->stubMe();
         $followingUserIdList = $authUser->following()->get()->pluck('id');
 
-        $q = Tweet::whereIn('user_id', $followingUserIdList);
-        $retweets = $q->has('retweets')->get();
-        $tweets = $q->with(['favorites', 'mentions', 'attachments'])->get();
+        $tweets = Tweet::whereIn('user_id', $followingUserIdList)
+            ->with('attachments')
+            ->with(['retweets' => function(Builder $q) use ($followingUserIdList) {
+                return $q->whereIn('user_id', $followingUserIdList);
+            }])
+            ->withCount('favorites')
+            ->withCount('mentions')
+            ->get();
 
         return response()->json([
-            'tweets' => $retweets->concat($tweets)
+            'tweets' => $tweets
         ]);
     }
 
@@ -95,10 +103,49 @@ class TweetController extends Controller
         return response()->json();
     }
 
-    // TODO: define this
-    public function retweet(Request $request, int $tweetId)
+    /**
+     * @param CreateTweetRequest $request
+     * @param int $targetTweetId
+     * @return JsonResponse
+     */
+    public function retweet(CreateTweetRequest $request, int $targetTweetId): JsonResponse
     {
+        $validated = $request->validated();
 
+        $authUser = $this->stubMe();
+
+        $tweet = Tweet::create([
+            'user_id' => $authUser->id,
+            'body' => $validated['body']
+        ]);
+
+        $reTweet = ReTweet::create([
+            'tweet_id' => $targetTweetId,
+            're_tweet_id' => $tweet->id
+        ]);
+
+        return response()->json([
+            'tweet' => $tweet,
+            'retweet' => $reTweet
+        ]);
+    }
+
+    /**
+     * @param int $targetTweetId
+     * @return JsonResponse
+     */
+    public function removeTweet(int $targetTweetId): JsonResponse
+    {
+        // TODO: Let's add test for the case that tweet has every relationships
+        $record = Tweet::find($targetTweetId);
+
+        // TODO: We may need to remove everything attached
+        $record->retweets()->detach();
+        $record->mentions()->delete();
+
+        $record->delete();
+
+        return response()->json();
     }
 
     /**
