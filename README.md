@@ -1,6 +1,16 @@
 # twitter-markup-backend
 Twitterのマークアップに対して、実際のバックエンドを追加します。
 
+### 必要なソフトウェア
+動作環境はIntel製チップのMacOS(最新）を想定しています。
+
+| 名前 | リンク |
+----|---- 
+| Docker Desktop for Mac | [Docker Desktop](https://www.docker.com/products/docker-desktop) |
+| Infrastructure as Code(インフラ構築) | [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) |
+| API開発補助 | [Postman](http://www.customink.com/) |
+
+
 ### ローカル開発環境(docker/docker-compose)
 ```bash
 # Dockerを起動中に
