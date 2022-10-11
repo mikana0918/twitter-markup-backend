@@ -23,6 +23,16 @@ class TweetAttachment extends Model
     use HasFactory;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'tweet_id',
+        'path'
+    ];
+
+    /**
      * @return BelongsTo
      */
     public function tweet(): BelongsTo

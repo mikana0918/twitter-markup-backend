@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateTweetRequest;
 use App\Models\FavoriteTweet;
 use App\Models\ReTweet;
+use App\Models\TweetAttachment;
 use App\Models\User;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use App\Models\Tweet;
-use App\Http\Requests\CreateTweetRequest;
+use App\Http\Requests\CreateReTweetRequest;
 
 class TweetController extends Controller
 {
@@ -68,8 +70,19 @@ class TweetController extends Controller
             'body' => $validated['body']
         ]);
 
+        foreach($request->file() as $key => $value) {
+            $path = $request->file($key)->store(
+                'attachments/users/'.$authUser ->id.'/tweets/'.$tweet->id.'/'.$key, 's3'
+            );
+
+            TweetAttachment::create([
+                'tweet_id' => $tweet->id,
+                'path' => $path
+            ]);
+        }
+
         return response()->json([
-            'tweet' => $tweet
+            'tweet' => $tweet->with(['attachments'])->where('id', $tweet->id)->first()
         ]);
     }
 
@@ -95,7 +108,6 @@ class TweetController extends Controller
      */
     public function removeFavorite(int $tweetId): JsonResponse
     {
-        // TODO: Remove soft delete column deleted_at
         $authUser = $this->stubMe();
 
         FavoriteTweet::where('tweet_id', $tweetId)->where('user_id', $authUser->id)->delete();
@@ -104,11 +116,11 @@ class TweetController extends Controller
     }
 
     /**
-     * @param CreateTweetRequest $request
+     * @param CreateReTweetRequest $request
      * @param int $targetTweetId
      * @return JsonResponse
      */
-    public function retweet(CreateTweetRequest $request, int $targetTweetId): JsonResponse
+    public function retweet(CreateReTweetRequest $request, int $targetTweetId): JsonResponse
     {
         $validated = $request->validated();
 
