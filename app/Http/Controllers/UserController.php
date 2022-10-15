@@ -56,7 +56,7 @@ class UserController extends Controller
      * @param int $userId
      * @return JsonResponse
      */
-    public function followUserById(Request $request, int $userId)
+    public function followUserById(Request $request, int $userId): JsonResponse
     {
         // TODO: User can not follow own
         // TODO: User can not follow with no existing userId including deleted user

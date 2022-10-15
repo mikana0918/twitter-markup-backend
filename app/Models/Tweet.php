@@ -43,11 +43,11 @@ class Tweet extends Model
     }
 
     /**
-     * @return HasMany
+     * @return BelongsToMany
      */
-    public function mentions(): HasMany
+    public function mentions(): BelongsToMany
     {
-        return $this->hasMany(MentionOfTweet::class, 'tweet_id','id');
+        return $this->belongsToMany(Tweet::class, 'mention_of_tweets', 'mentioned_tweet_id', 'tweet_id');
     }
 
     public function retweets(): BelongsToMany

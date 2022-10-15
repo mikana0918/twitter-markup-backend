@@ -28,9 +28,10 @@ class TweetController extends Controller
 
         $tweets = Tweet::whereIn('user_id', $followingUserIdList)
             ->with('attachments')
-            ->with(['retweets' => function(Builder $q) use ($followingUserIdList) {
+            ->with(['retweets' => function (Builder $q) use ($followingUserIdList) {
                 return $q->whereIn('user_id', $followingUserIdList);
             }])
+            ->withCount('retweets')
             ->withCount('favorites')
             ->withCount('mentions')
             ->get();
@@ -47,14 +48,20 @@ class TweetController extends Controller
      */
     public function show(int $tweetId): JsonResponse
     {
-        $tweet = Tweet::find($tweetId);
+        $tweetWithDetails = Tweet::where('id', $tweetId)
+            ->with(['retweets', 'attachments', 'mentions'])
+            ->withCount('retweets')
+            ->withCount('favorites')
+            ->withCount('mentions')
+            ->first();
+
 
         return response()->json([
-            'tweet' => $tweet
+            'tweet' => $tweetWithDetails
         ]);
     }
 
-    /**
+    /**cc
      * Post new tweet
      * @param CreateTweetRequest $request
      * @return JsonResponse
@@ -70,9 +77,10 @@ class TweetController extends Controller
             'body' => $validated['body']
         ]);
 
-        foreach($request->file() as $key => $value) {
+        // Store files
+        foreach ($request->file() as $key => $value) {
             $path = $request->file($key)->store(
-                'attachments/users/'.$authUser ->id.'/tweets/'.$tweet->id.'/'.$key, 's3'
+                'attachments/users/' . $authUser->id . '/tweets/' . $tweet->id . '/' . $key, 's3'
             );
 
             TweetAttachment::create([
