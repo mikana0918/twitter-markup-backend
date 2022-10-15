@@ -34,6 +34,8 @@ class Tweet extends Model
         'body'
     ];
 
+
+
     /**
      * @return HasMany
      */
