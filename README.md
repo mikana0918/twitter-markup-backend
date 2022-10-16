@@ -14,6 +14,9 @@ Twitterのマークアップに対して、実際のバックエンドを追加�
 ### ローカル開発環境(docker/docker-compose)
 ```bash
 # Dockerを起動中に
+$ cp .env.example .env
+$ composer install -o
+$ php artisan key:generate
 $ docker-compose up -d 
 ```
 
