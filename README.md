@@ -15,12 +15,12 @@ Twitterのマークアップに対して、実際のバックエンドを追加�
 ```bash
 # Dockerを起動中に
 $ cp .env.example .env
-$ php artisan key:generate
 $ docker-compose up -d
 # Docker起動後に
 $ docker-compose exec laravel.test bash
 # Laravelコンテナの中で
 $ composer install -o 
+$ php artisan key:generate
 ```
 
 ### コンテナの中に入る
