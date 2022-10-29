@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\FollowedUser;
 use Illuminate\Database\Seeder;
-use Database\Seeders\DefaultUserSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,5 +15,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         (new DefaultUserSeeder())->run();
+        (new FollowingUserSeeder())->run();
+        (new FollowedUserSeeder())->run();
+        (new TweetSeeder())->run();
     }
 }
