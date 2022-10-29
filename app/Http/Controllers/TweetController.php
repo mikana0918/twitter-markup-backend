@@ -21,7 +21,6 @@ class TweetController extends Controller
     public function list(): JsonResponse
     {
         // TODO: If we need infinite loop, we need to add pagination query
-        // TODO: Let's add test for the case that tweet has every relationships
 
         $authUser = $this->stubMe();
         $followingUserIdList = $authUser->following()->get()->pluck('id')->add($authUser->id);
@@ -151,7 +150,7 @@ class TweetController extends Controller
      * @param int $targetTweetId
      * @return JsonResponse
      */
-    public function removeTweet(int $targetTweetId): JsonResponse
+    public function destroy(int $targetTweetId): JsonResponse
     {
         // TODO: Let's add test for the case that tweet has every relationships
         $record = Tweet::find($targetTweetId);

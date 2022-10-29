@@ -38,6 +38,7 @@ Route::controller(TweetController::class)->group(function() {
     Route::get('/tweets', 'list');
     Route::post('/tweets', 'store');
     Route::get('/tweets/{tweetId}', 'show');
+    Route::delete('/tweets/{tweetId}', 'destroy');
 
     Route::post('/tweets/favorites/{tweetId}', 'toggleFavorite');
 
