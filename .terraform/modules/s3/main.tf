@@ -1,10 +1,5 @@
-#----------------------------------------
-# S3作成
-#----------------------------------------
-#バケット情報
 resource "aws_s3_bucket" "backend-asset" {
     bucket = var.backend_assets_bucket_name
-    //タグの設定
     tags = {
         Name = "${var.env}-backend-asset"
         Environment = var.env

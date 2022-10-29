@@ -24,13 +24,17 @@ class TweetController extends Controller
         // TODO: Let's add test for the case that tweet has every relationships
 
         $authUser = $this->stubMe();
-        $followingUserIdList = $authUser->following()->get()->pluck('id');
+        $followingUserIdList = $authUser->following()->get()->pluck('id')->add($authUser->id);
 
         $tweets = Tweet::whereIn('user_id', $followingUserIdList)
-            ->with('attachments')
-            ->with(['retweets' => function (Builder $q) use ($followingUserIdList) {
-                return $q->whereIn('user_id', $followingUserIdList);
-            }])
+            ->orderBy('created_at', 'desc')
+            ->with([
+                'retweets' => function (Builder $q) use ($followingUserIdList) {
+                    return $q->whereIn('user_id', $followingUserIdList);
+                },
+                'attachments',
+                'user'
+            ])
             ->withCount('retweets')
             ->withCount('favorites')
             ->withCount('mentions')
@@ -49,7 +53,7 @@ class TweetController extends Controller
     public function show(int $tweetId): JsonResponse
     {
         $tweetWithDetails = Tweet::where('id', $tweetId)
-            ->with(['retweets', 'attachments', 'mentions'])
+            ->with(['retweets', 'attachments', 'mentions', 'user'])
             ->withCount('retweets')
             ->withCount('favorites')
             ->withCount('mentions')
@@ -98,27 +102,20 @@ class TweetController extends Controller
      * @param int $tweetId
      * @return JsonResponse
      */
-    public function addFavorite(int $tweetId): JsonResponse
+    public function toggleFavorite(int $tweetId): JsonResponse
     {
         $authUser = $this->stubMe();
 
-        FavoriteTweet::updateOrCreate(
-            ['user_id' => $authUser->id, 'tweet_id' => $tweetId],
-            ['user_id' => $authUser->id, 'tweet_id' => $tweetId]
-        );
+        $favorite = FavoriteTweet::where('tweet_id', $tweetId)->where('user_id', $authUser->id);
 
-        return response()->json();
-    }
-
-    /**
-     * @param int $tweetId
-     * @return JsonResponse
-     */
-    public function removeFavorite(int $tweetId): JsonResponse
-    {
-        $authUser = $this->stubMe();
-
-        FavoriteTweet::where('tweet_id', $tweetId)->where('user_id', $authUser->id)->delete();
+        if ($favorite->get()->count() > 0) {
+            $favorite->delete();
+        } else {
+            FavoriteTweet::updateOrCreate(
+                ['user_id' => $authUser->id, 'tweet_id' => $tweetId],
+                ['user_id' => $authUser->id, 'tweet_id' => $tweetId]
+            );
+        }
 
         return response()->json();
     }
